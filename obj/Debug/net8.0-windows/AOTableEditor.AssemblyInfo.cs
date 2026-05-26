@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AOTableEditor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+68b4c30c98c61431be668bbbe61b3ed8f45ee494")]
 [assembly: System.Reflection.AssemblyProductAttribute("AOTableEditor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AOTableEditor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

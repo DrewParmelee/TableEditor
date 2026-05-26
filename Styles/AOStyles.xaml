@@ -16,6 +16,13 @@
     <Color x:Key="AoAshColor">#949494</Color>
     <Color x:Key="AoSmokeColor">#DCDCDC</Color>
     <Color x:Key="AoFogColor">#F4F4F4</Color>
+    <Color x:Key="AoAppBackgroundColor">#F7F9FB</Color>
+    <Color x:Key="AoSurfaceColor">#FFFFFF</Color>
+    <Color x:Key="AoLineColor">#D8E1E8</Color>
+    <Color x:Key="AoHoverColor">#EEF6FB</Color>
+    <Color x:Key="AoPressedColor">#DDEFF9</Color>
+    <Color x:Key="AoGreenFadedColor">#EEFFEE</Color>
+    <Color x:Key="AoOrangeFadedColor">#FFEEDD</Color>
 
     <!-- Brushes -->
     <SolidColorBrush x:Key="AoBlueBrush" Color="{StaticResource AoBlueColor}"/>
@@ -28,39 +35,472 @@
     <SolidColorBrush x:Key="AoAshBrush" Color="{StaticResource AoAshColor}"/>
     <SolidColorBrush x:Key="AoSmokeBrush" Color="{StaticResource AoSmokeColor}"/>
     <SolidColorBrush x:Key="AoFogBrush" Color="{StaticResource AoFogColor}"/>
-
-    <!-- Gradients -->
-    <LinearGradientBrush x:Key="AoBlueGradientBrush" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="{StaticResource AoBlueColor}" Offset="0"/>
-        <GradientStop Color="{StaticResource AoBlueDarkColor}" Offset="1"/>
-    </LinearGradientBrush>
+    <SolidColorBrush x:Key="AoAppBackgroundBrush" Color="{StaticResource AoAppBackgroundColor}"/>
+    <SolidColorBrush x:Key="AoSurfaceBrush" Color="{StaticResource AoSurfaceColor}"/>
+    <SolidColorBrush x:Key="AoLineBrush" Color="{StaticResource AoLineColor}"/>
+    <SolidColorBrush x:Key="AoHoverBrush" Color="{StaticResource AoHoverColor}"/>
+    <SolidColorBrush x:Key="AoPressedBrush" Color="{StaticResource AoPressedColor}"/>
+    <SolidColorBrush x:Key="AoGreenFadedBrush" Color="{StaticResource AoGreenFadedColor}"/>
+    <SolidColorBrush x:Key="AoOrangeFadedBrush" Color="{StaticResource AoOrangeFadedColor}"/>
 
     <!-- Menu -->
     <Style x:Key="MainMenuStyle" TargetType="Menu">
-        <Setter Property="Background" Value="{StaticResource AoBlueGradientBrush}"/>
+        <Setter Property="Background" Value="{StaticResource AoBlueBrush}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Padding" Value="4,0"/>
     </Style>
 
     <Style x:Key="TopMenuItemStyle" TargetType="MenuItem">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="Padding" Value="11,0"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Grid SnapsToDevicePixels="True">
+                        <Border x:Name="HeaderBorder"
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter ContentSource="Header"
+                                              RecognizesAccessKey="True"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+
+                        <Popup x:Name="PART_Popup"
+                               Placement="Bottom"
+                               IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               PopupAnimation="Fade">
+                            <Border Background="{StaticResource AoSurfaceBrush}"
+                                    BorderBrush="{StaticResource AoLineBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="0,0,4,4"
+                                    MinWidth="190"
+                                    Padding="4,5"
+                                    SnapsToDevicePixels="True">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#66000000"
+                                                      BlurRadius="10"
+                                                      ShadowDepth="2"
+                                                      Opacity="0.22"/>
+                                </Border.Effect>
+
+                                <StackPanel IsItemsHost="True"
+                                            KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                            </Border>
+                        </Popup>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="HeaderBorder" Property="Background" Value="{StaticResource AoSteelBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsSubmenuOpen" Value="True">
+                            <Setter TargetName="HeaderBorder" Property="Background" Value="{StaticResource AoBlueDarkBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.55"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="SubMenuItemStyle" TargetType="MenuItem">
         <Setter Property="Foreground" Value="{StaticResource AoCharcoalBrush}"/>
-        <Setter Property="Background" Value="White"/>
-        <Setter Property="Padding" Value="20,5"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding" Value="14,0"/>
         <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="MinWidth" Value="170"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border x:Name="ItemBorder"
+                            Height="{TemplateBinding Height}"
+                            MinWidth="{TemplateBinding MinWidth}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="3"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter ContentSource="Header"
+                                          RecognizesAccessKey="True"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="ItemBorder" Property="Background" Value="{StaticResource AoHoverBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource AoBlueBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource AoAshBrush}"/>
+                            <Setter Property="Opacity" Value="0.72"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MenuSeparatorStyle" TargetType="Separator">
+        <Setter Property="Margin" Value="8,4"/>
+        <Setter Property="Height" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Separator">
+                    <Border Height="1"
+                            Background="{StaticResource AoLineBrush}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Button">
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="MinWidth" Value="76"/>
+        <Setter Property="Padding" Value="12,4"/>
+        <Setter Property="Foreground" Value="{StaticResource AoCharcoalBrush}"/>
+        <Setter Property="Background" Value="{StaticResource AoSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AoLineBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="ButtonBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource AoHoverBrush}"/>
+                            <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{StaticResource AoSteelBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource AoPressedBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.42"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="IconButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="MinWidth" Value="30"/>
+        <Setter Property="Height" Value="26"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+
+    <Style x:Key="MiniIconButtonStyle" TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
+        <Setter Property="Width" Value="24"/>
+        <Setter Property="MinWidth" Value="24"/>
+        <Setter Property="Height" Value="24"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="2,0,0,0"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <Style x:Key="CenteredIconTextStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="LineHeight" Value="12"/>
+        <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="IconToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="MinWidth" Value="30"/>
+        <Setter Property="Height" Value="26"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Foreground" Value="{StaticResource AoCharcoalBrush}"/>
+        <Setter Property="Background" Value="{StaticResource AoSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AoLineBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="ToggleBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ToggleBorder" Property="Background" Value="{StaticResource AoHoverBrush}"/>
+                            <Setter TargetName="ToggleBorder" Property="BorderBrush" Value="{StaticResource AoSteelBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="ToggleBorder" Property="Background" Value="{StaticResource AoBlueBrush}"/>
+                            <Setter TargetName="ToggleBorder" Property="BorderBrush" Value="{StaticResource AoBlueBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.42"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="EditorGroupLabelStyle" TargetType="TextBlock">
+        <Setter Property="Margin" Value="12,0,3,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{StaticResource AoGraphiteBrush}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <Style TargetType="TextBox">
+        <Setter Property="Background" Value="{StaticResource AoSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AoLineBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="6,2"/>
+        <Setter Property="Foreground" Value="{StaticResource AoCharcoalBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border x:Name="TextBoxBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Margin="{TemplateBinding Padding}"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter TargetName="TextBoxBorder" Property="BorderBrush" Value="{StaticResource AoSteelBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.55"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ComparisonToggleStyle" TargetType="ToggleButton">
+        <Setter Property="MinWidth" Value="78"/>
+        <Setter Property="Height" Value="26"/>
+        <Setter Property="Padding" Value="12,3"/>
+        <Setter Property="Margin" Value="0,0,4,0"/>
+        <Setter Property="Foreground" Value="{StaticResource AoCharcoalBrush}"/>
+        <Setter Property="Background" Value="{StaticResource AoSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AoLineBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="ToggleBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="4,4,0,0"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="ToggleBorder" Property="Background" Value="{StaticResource AoBlueBrush}"/>
+                            <Setter TargetName="ToggleBorder" Property="BorderBrush" Value="{StaticResource AoBlueBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsChecked" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="ToggleBorder" Property="Background" Value="{StaticResource AoSkyLightBrush}"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- Left table list -->
     <Style x:Key="TableListStyle" TargetType="ListBox">
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="Background" Value="White"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Background" Value="{StaticResource AoSurfaceBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource AoCharcoalBrush}"/>
+    </Style>
+
+    <Style x:Key="TableListItemStyle" TargetType="ListBoxItem">
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="Margin" Value="4,1"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="ItemBorder"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ItemBorder" Property="Background" Value="{StaticResource AoHoverBrush}"/>
+                            <Setter TargetName="ItemBorder" Property="BorderBrush" Value="{StaticResource AoLineBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="ItemBorder" Property="Background" Value="{StaticResource AoPressedBrush}"/>
+                            <Setter TargetName="ItemBorder" Property="BorderBrush" Value="{StaticResource AoSteelBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding HasChanges}" Value="True">
+                <Setter Property="FontWeight" Value="SemiBold"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Page tabs -->
+    <Style x:Key="PageTabsStyle" TargetType="ListBox">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Margin" Value="0,0,0,6"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PageTabItemStyle" TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="{StaticResource AoCharcoalBrush}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="TabBorder"
+                            Background="{StaticResource AoSurfaceBrush}"
+                            BorderBrush="{StaticResource AoLineBrush}"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            Margin="0,0,2,0"
+                            Padding="12,5">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="TabBorder" Property="Background" Value="{StaticResource AoBlueBrush}"/>
+                            <Setter TargetName="TabBorder" Property="BorderBrush" Value="{StaticResource AoBlueBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsSelected" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="TabBorder" Property="Background" Value="{StaticResource AoSkyLightBrush}"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Open document tabs -->
+    <Style x:Key="DocumentTabsStyle" TargetType="ListBox" BasedOn="{StaticResource PageTabsStyle}">
+        <Setter Property="Margin" Value="8,4,4,0"/>
+    </Style>
+
+    <Style x:Key="DocumentTabItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource PageTabItemStyle}">
+        <Setter Property="MinWidth" Value="120"/>
+    </Style>
+
+    <Style x:Key="DocumentTabCloseButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="18"/>
+        <Setter Property="MinWidth" Value="18"/>
+        <Setter Property="Height" Value="18"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="8,0,-4,0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="ButtonBorder"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="9">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          RecognizesAccessKey="False"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource AoPressedBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource AoBlueBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- DataGrid -->
@@ -75,22 +515,23 @@
         <Setter Property="HeadersVisibility" Value="Column"/>
 
         <Setter Property="GridLinesVisibility" Value="All"/>
-        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource AoSmokeBrush}"/>
-        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource AoSmokeBrush}"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource AoLineBrush}"/>
+        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource AoLineBrush}"/>
         <Setter Property="SelectionUnit" Value="Cell"/>
         <Setter Property="SelectionMode" Value="Extended"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="13"/>
 
         <!-- Fixed height helps avoid jumpy scrolling -->
-        <Setter Property="RowHeight" Value="22"/>
-        <Setter Property="MinRowHeight" Value="22"/>
+        <Setter Property="RowHeight" Value="24"/>
+        <Setter Property="MinRowHeight" Value="24"/>
 
         <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
-        <Setter Property="VirtualizingPanel.ScrollUnit" Value="Pixel"/>
+        <Setter Property="VirtualizingPanel.ScrollUnit" Value="Item"/>
 
-        <Setter Property="Background" Value="{StaticResource AoFogBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource AoSmokeBrush}"/>
+        <Setter Property="Background" Value="{StaticResource AoSurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AoLineBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="EnableRowVirtualization" Value="True"/>
         <Setter Property="EnableColumnVirtualization" Value="True"/>
         <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
@@ -104,8 +545,8 @@
     <Style x:Key="ResizeOnlyColumnHeaderStyle" TargetType="DataGridColumnHeader">
         <Setter Property="Height" Value="6"/>
         <Setter Property="MinHeight" Value="6"/>
-        <Setter Property="Background" Value="{StaticResource AoSmokeBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource AoSmokeBrush}"/>
+        <Setter Property="Background" Value="{StaticResource AoLineBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AoLineBrush}"/>
         <Setter Property="BorderThickness" Value="0,0,1,0"/>
         <Setter Property="Padding" Value="0"/>
         <Setter Property="Content" Value=""/>
@@ -114,9 +555,9 @@
     <Style x:Key="RowHeaderCellStyle" TargetType="DataGridCell">
         <Setter Property="Background" Value="{StaticResource AoSkyLightBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource AoCharcoalBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource AoSmokeBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AoLineBrush}"/>
         <Setter Property="BorderThickness" Value="0,0,1,1"/>
-        <Setter Property="Padding" Value="4,0"/>
+        <Setter Property="Padding" Value="6,0"/>
 
         <Style.Triggers>
             <DataTrigger Binding="{Binding [__RowKind]}" Value="Header">
@@ -135,9 +576,9 @@
     <Style x:Key="ValueCellStyle" TargetType="DataGridCell">
         <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="{StaticResource AoCharcoalBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource AoSmokeBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AoLineBrush}"/>
         <Setter Property="BorderThickness" Value="0,0,1,1"/>
-        <Setter Property="Padding" Value="4,0"/>
+        <Setter Property="Padding" Value="6,0"/>
 
         <Style.Triggers>
             <DataTrigger Binding="{Binding [__RowKind]}" Value="Header">

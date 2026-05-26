@@ -4,7 +4,7 @@
         Title="Table Editor"
         Height="900"
         Width="1600"
-        Background="#F4F4F4">
+        Background="{DynamicResource AoAppBackgroundBrush}">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -19,17 +19,165 @@
         <Menu DockPanel.Dock="Top"
               Style="{StaticResource MainMenuStyle}">
             <MenuItem Header="File" Style="{StaticResource TopMenuItemStyle}">
+                <MenuItem Header="New" Click="NewFile_Click" Style="{StaticResource SubMenuItemStyle}"/>
                 <MenuItem Header="Open..." Click="OpenFile_Click" Style="{StaticResource SubMenuItemStyle}"/>
+                <Separator Style="{StaticResource MenuSeparatorStyle}"/>
+                <MenuItem x:Name="FileSaveMenuItem"
+                          Header="Save"
+                          Click="Save_Click"
+                          IsEnabled="False"
+                          Style="{StaticResource SubMenuItemStyle}"/>
+                <MenuItem x:Name="FileSaveAsMenuItem"
+                          Header="Save As..."
+                          Click="SaveAs_Click"
+                          IsEnabled="False"
+                          Style="{StaticResource SubMenuItemStyle}"/>
             </MenuItem>
 
-            <MenuItem Header="Edit" Style="{StaticResource TopMenuItemStyle}"/>
-            <MenuItem Header="View" Style="{StaticResource TopMenuItemStyle}"/>
-            <MenuItem Header="Tools" Style="{StaticResource TopMenuItemStyle}"/>
-            <MenuItem Header="Window" Style="{StaticResource TopMenuItemStyle}"/>
-            <MenuItem Header="Help" Style="{StaticResource TopMenuItemStyle}"/>
+            <MenuItem Header="Edit" Style="{StaticResource TopMenuItemStyle}">
+                <MenuItem x:Name="EditMetadataMenuItem"
+                          Header="Metadata"
+                          Click="Metadata_Click"
+                          IsEnabled="False"
+                          Style="{StaticResource SubMenuItemStyle}"/>
+            </MenuItem>
+            <MenuItem Header="View" Style="{StaticResource TopMenuItemStyle}">
+                <MenuItem Header="View File XML" Click="ViewFileXml_Click" Style="{StaticResource SubMenuItemStyle}"/>
+            </MenuItem>
+            <MenuItem Header="Tools" Style="{StaticResource TopMenuItemStyle}">
+                <MenuItem x:Name="ExportTablesMenuItem"
+                          Header="Export Table..."
+                          Click="ExportTables_Click"
+                          IsEnabled="False"
+                          Style="{StaticResource SubMenuItemStyle}"/>
+            </MenuItem>
+            <MenuItem Header="Help" Style="{StaticResource TopMenuItemStyle}">
+                <MenuItem Header="XML Format Reference"
+                          Click="XmlFormatReference_Click"
+                          Style="{StaticResource SubMenuItemStyle}"/>
+            </MenuItem>
         </Menu>
 
-        <Grid>
+        <Grid DockPanel.Dock="Top"
+              Height="34"
+              Background="{StaticResource AoSurfaceBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
+                        Margin="8,3"
+                        HorizontalAlignment="Left">
+                <Button x:Name="AddTableButton"
+                        Style="{StaticResource IconButtonStyle}"
+                        ToolTip="Add Table"
+                        Click="AddTable_Click">
+                    <TextBlock Text="+"
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Button>
+
+                <Button x:Name="SaveButton"
+                        Style="{StaticResource IconButtonStyle}"
+                        Margin="8,0,0,0"
+                        IsEnabled="False"
+                        ToolTip="Save"
+                        Click="Save_Click">
+                    <TextBlock Text="&#xE74E;"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="15"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Button>
+
+                <Button x:Name="RefreshButton"
+                        Style="{StaticResource IconButtonStyle}"
+                        Margin="4,0,0,0"
+                        ToolTip="Reload XML from disk"
+                        Click="Refresh_Click">
+                    <TextBlock Text="&#xE72C;"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="15"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Button>
+            </StackPanel>
+
+            <Separator Width="1"
+                       Grid.Column="1"
+                       Margin="2,6"
+                       Background="{StaticResource AoSmokeBrush}"/>
+
+            <StackPanel x:Name="ViewTabsPanel"
+                        Grid.Column="2"
+                        Orientation="Horizontal"
+                        Margin="8,4"
+                        Visibility="Collapsed">
+                <ToggleButton x:Name="ShowCurrentToggle"
+                              Content="Current"
+                              Style="{StaticResource ComparisonToggleStyle}"
+                              IsChecked="False"
+                              Checked="ViewToggle_Changed"
+                              Unchecked="ViewToggle_Changed"/>
+
+                <ToggleButton x:Name="ShowUpdatedToggle"
+                              Content="Pending"
+                              Style="{StaticResource ComparisonToggleStyle}"
+                              IsChecked="True"
+                              Checked="ViewToggle_Changed"
+                              Unchecked="ViewToggle_Changed"/>
+            </StackPanel>
+        </Grid>
+
+        <Border x:Name="DocumentTabsRow"
+                DockPanel.Dock="Top"
+                Background="{StaticResource AoAppBackgroundBrush}"
+                BorderBrush="{StaticResource AoLineBrush}"
+                BorderThickness="0,0,0,1"
+                Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal">
+                <ListBox x:Name="DocumentTabsList"
+                         SelectionChanged="DocumentTabsList_SelectionChanged"
+                         Style="{StaticResource DocumentTabsStyle}"
+                         ItemContainerStyle="{StaticResource DocumentTabItemStyle}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel LastChildFill="True">
+                                <Button DockPanel.Dock="Right"
+                                        Style="{StaticResource DocumentTabCloseButtonStyle}"
+                                        ToolTip="Close XML"
+                                        Click="CloseDocumentTab_Click">
+                                    <TextBlock Text="&#xE711;"
+                                               Style="{StaticResource CenteredIconTextStyle}"
+                                               FontSize="10"
+                                               LineHeight="10"/>
+                                </Button>
+
+                                <TextBlock Text="{Binding DisplayName}"
+                                           VerticalAlignment="Center"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <Button Style="{StaticResource MiniIconButtonStyle}"
+                        Margin="2,4,8,0"
+                        ToolTip="Open XML"
+                        Click="OpenFile_Click">
+                    <TextBlock Text="&#xE710;"
+                               Style="{StaticResource CenteredIconTextStyle}"
+                               FontSize="12"
+                               LineHeight="12"/>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <Grid Background="{StaticResource AoAppBackgroundBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="280"/>
                 <ColumnDefinition Width="6"/>
@@ -37,44 +185,115 @@
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0"
-                    Background="White"
-                    BorderBrush="{StaticResource AoSmokeBrush}"
+                    Background="{StaticResource AoSurfaceBrush}"
+                    BorderBrush="{StaticResource AoLineBrush}"
                     BorderThickness="0,0,1,0">
 
                 <ListBox x:Name="TablesList"
+                         PreviewMouseRightButtonDown="TablesList_PreviewMouseRightButtonDown"
                          SelectionChanged="TablesList_SelectionChanged"
-                         DisplayMemberPath="Name"
-                         Style="{StaticResource TableListStyle}"/>
+                         DisplayMemberPath="DisplayName"
+                         Style="{StaticResource TableListStyle}"
+                         ItemContainerStyle="{StaticResource TableListItemStyle}"/>
             </Border>
 
             <GridSplitter Grid.Column="1"
                           Width="6"
                           HorizontalAlignment="Stretch"
-                          Background="{StaticResource AoSmokeBrush}"/>
+                          Background="{StaticResource AoAppBackgroundBrush}"/>
 
             <Grid Grid.Column="2"
-                  Margin="8">
+                  Margin="12">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="38"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <DockPanel Grid.Row="0"
                            LastChildFill="True">
-                    <TextBlock Text="Comment:"
+                    <TextBlock Text="Comment"
                                Width="70"
-                               VerticalAlignment="Center"
+                               VerticalAlignment="Top"
+                               Margin="0,4,0,0"
                                FontWeight="SemiBold"
                                Foreground="{StaticResource AoCharcoalBrush}"/>
 
-                    <TextBox Height="22"
-                             VerticalAlignment="Center"/>
+                    <TextBlock x:Name="CommentText"
+                               MaxHeight="72"
+                               VerticalAlignment="Top"
+                               TextWrapping="Wrap"
+                               TextTrimming="CharacterEllipsis"
+                               Foreground="{StaticResource AoGraphiteBrush}"/>
                 </DockPanel>
 
-                <DataGrid x:Name="RatingGrid"
-                          Grid.Row="1"
-                          Style="{StaticResource RatingGridStyle}"
-                          ColumnHeaderStyle="{StaticResource ResizeOnlyColumnHeaderStyle}"/>
+                <DockPanel x:Name="PageTabsRow"
+                           Grid.Row="1"
+                           LastChildFill="True">
+                    <ListBox x:Name="PageTabs"
+                             SelectionChanged="PageTabs_SelectionChanged"
+                             Style="{StaticResource PageTabsStyle}"
+                             ItemContainerStyle="{StaticResource PageTabItemStyle}"
+                             Visibility="Collapsed"/>
+                </DockPanel>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="CurrentViewColumn" Width="0"/>
+                        <ColumnDefinition x:Name="ComparisonSplitterColumn" Width="0"/>
+                        <ColumnDefinition x:Name="PendingViewColumn" Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid x:Name="CurrentViewPanel"
+                          Grid.Column="0"
+                          Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Current"
+                                   VerticalAlignment="Center"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource AoCharcoalBrush}"/>
+
+                        <DataGrid x:Name="CurrentGrid"
+                                  Grid.Row="1"
+                                  IsReadOnly="True"
+                                  Style="{StaticResource RatingGridStyle}"
+                                  ColumnHeaderStyle="{StaticResource ResizeOnlyColumnHeaderStyle}"/>
+                    </Grid>
+
+                    <GridSplitter x:Name="ComparisonGridSplitter"
+                                  Grid.Column="1"
+                                  Width="6"
+                                  HorizontalAlignment="Stretch"
+                                  Background="{StaticResource AoAppBackgroundBrush}"
+                                  Visibility="Collapsed"/>
+
+                    <Grid x:Name="PendingViewPanel"
+                          Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Name="PendingHeaderRow" Height="0"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock x:Name="PendingHeaderText"
+                                   Text="Pending"
+                                   VerticalAlignment="Center"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource AoCharcoalBrush}"
+                                   Visibility="Collapsed"/>
+
+                        <DataGrid x:Name="RatingGrid"
+                                  Grid.Row="1"
+                                  BeginningEdit="RatingGrid_BeginningEdit"
+                                  CellEditEnding="RatingGrid_CellEditEnding"
+                                  PreviewKeyDown="RatingGrid_PreviewKeyDown"
+                                  Style="{StaticResource RatingGridStyle}"
+                                  ColumnHeaderStyle="{StaticResource ResizeOnlyColumnHeaderStyle}"/>
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     </DockPanel>
