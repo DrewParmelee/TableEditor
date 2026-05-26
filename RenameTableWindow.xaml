@@ -1,0 +1,57 @@
+<Window x:Class="AOTableEditor.RenameTableWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Rename Table"
+        Height="170"
+        Width="420"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource AoAppBackgroundBrush}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/AOStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="PromptLabel"
+                   Text="Table name"
+                   FontWeight="SemiBold"
+                   Foreground="{StaticResource AoCharcoalBrush}"/>
+
+        <TextBox x:Name="NameTextBox"
+                 Grid.Row="1"
+                 Margin="0,6,0,0"
+                 Height="28"/>
+
+        <TextBlock x:Name="ErrorText"
+                   Grid.Row="2"
+                   Margin="0,8,0,0"
+                   Foreground="#D1002A"
+                   TextWrapping="Wrap"/>
+
+        <StackPanel Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="Rename"
+                    x:Name="ActionButton"
+                    Width="86"
+                    IsDefault="True"
+                    Click="Rename_Click"/>
+            <Button Content="Cancel"
+                    Width="86"
+                    Margin="8,0,0,0"
+                    IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>
