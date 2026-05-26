@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "AOTableEditor/1.0.0": {
+        "runtime": {
+          "AOTableEditor.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AOTableEditor/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

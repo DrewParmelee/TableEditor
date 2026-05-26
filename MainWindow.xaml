@@ -1,0 +1,81 @@
+﻿<Window x:Class="AOTableEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Table Editor"
+        Height="900"
+        Width="1600"
+        Background="#F4F4F4">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/AOStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <DockPanel>
+
+        <Menu DockPanel.Dock="Top"
+              Style="{StaticResource MainMenuStyle}">
+            <MenuItem Header="File" Style="{StaticResource TopMenuItemStyle}">
+                <MenuItem Header="Open..." Click="OpenFile_Click" Style="{StaticResource SubMenuItemStyle}"/>
+            </MenuItem>
+
+            <MenuItem Header="Edit" Style="{StaticResource TopMenuItemStyle}"/>
+            <MenuItem Header="View" Style="{StaticResource TopMenuItemStyle}"/>
+            <MenuItem Header="Tools" Style="{StaticResource TopMenuItemStyle}"/>
+            <MenuItem Header="Window" Style="{StaticResource TopMenuItemStyle}"/>
+            <MenuItem Header="Help" Style="{StaticResource TopMenuItemStyle}"/>
+        </Menu>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    Background="White"
+                    BorderBrush="{StaticResource AoSmokeBrush}"
+                    BorderThickness="0,0,1,0">
+
+                <ListBox x:Name="TablesList"
+                         SelectionChanged="TablesList_SelectionChanged"
+                         DisplayMemberPath="Name"
+                         Style="{StaticResource TableListStyle}"/>
+            </Border>
+
+            <GridSplitter Grid.Column="1"
+                          Width="6"
+                          HorizontalAlignment="Stretch"
+                          Background="{StaticResource AoSmokeBrush}"/>
+
+            <Grid Grid.Column="2"
+                  Margin="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="38"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0"
+                           LastChildFill="True">
+                    <TextBlock Text="Comment:"
+                               Width="70"
+                               VerticalAlignment="Center"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource AoCharcoalBrush}"/>
+
+                    <TextBox Height="22"
+                             VerticalAlignment="Center"/>
+                </DockPanel>
+
+                <DataGrid x:Name="RatingGrid"
+                          Grid.Row="1"
+                          Style="{StaticResource RatingGridStyle}"
+                          ColumnHeaderStyle="{StaticResource ResizeOnlyColumnHeaderStyle}"/>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>
